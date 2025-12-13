@@ -18,6 +18,9 @@ class Layer():
         """
         Calculate a forward pass for this layer
 
+        args:
+            X - layer inputs
+
         returns:
             Z - pre-activation output array
         """
