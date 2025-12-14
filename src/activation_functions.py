@@ -48,7 +48,7 @@ class SoftmaxCrossEntropy():
         self.A = None   # activation output
         self.Y = None   # True labels
     
-    def forward(self, Z, Y):
+    def forward(self, Z, Y=None):
         """
         Calculate a forward pass for this layer
 
@@ -56,7 +56,8 @@ class SoftmaxCrossEntropy():
             Z - ReLU pre-activaiton inputs
         
         returns:
-            L - Loss value
+            L - Loss value if labels are provided
+            A - Probability array if no labels provided
         """
 
         exp_Z = np.exp(Z-np.max(Z, axis=1, keepdims=True))
@@ -64,11 +65,13 @@ class SoftmaxCrossEntropy():
         A = np.clip(A, 1e-12, 1.0) # clip for numerical stability
 
         self.A = A
-        self.Y = Y
 
-        L = -np.mean(np.sum(Y*np.log(A), axis=1))
-
-        return L
+        if Y is not None: 
+            self.Y = Y
+            L = -np.mean(np.sum(Y*np.log(A), axis=1))
+            return L
+        else:
+            return A
     
     def backward(self):
         """
